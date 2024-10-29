@@ -9,14 +9,17 @@ import (
 	"escuelaApiREST/repositories"
 )
 
+// EstudianteController se utiliza para gestionar las operaciones CRUD de estudiantes usando un repositorio
 type EstudianteController struct {
 	repo repositories.EstudianteRepository
 }
 
+// NewEstudianteController crea una instancia de EstudianteController
 func NewEstudianteController(repo repositories.EstudianteRepository) *EstudianteController {
 	return &EstudianteController{repo: repo}
 }
 
+// GetEstudiantes maneja la solicitud para obtener todos los estudiantes
 func (ctrl *EstudianteController) GetEstudiantes(c *gin.Context) {
 	estudiantes, err := ctrl.repo.GetEstudiantes()
 	if err != nil {
@@ -26,20 +29,26 @@ func (ctrl *EstudianteController) GetEstudiantes(c *gin.Context) {
 	c.JSON(http.StatusOK, estudiantes)
 }
 
+// CreateEstudiante maneja la solicitud para crear un nuevo estudiante
 func (ctrl *EstudianteController) CreateEstudiante(c *gin.Context) {
+	// Vincular el JSON de la solicitud al modelo, manejando el error
 	var input models.Estudiante
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	//Llamar al repositorio para insertar el nuevo estudiande en BD
 	err := ctrl.repo.CreateEstudiante(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	//Mensaje de exito
 	c.JSON(http.StatusOK, gin.H{"status": "Estudiante creado"})
 }
 
+// UpdateEstudiante maneja la solicitud para actualizar todos los datos del estudiante
 func (ctrl *EstudianteController) UpdateEstudiante(c *gin.Context) {
 	id := c.Param("id") // Obtener el ID de la URL
 	var input models.Estudiante
@@ -60,7 +69,7 @@ func (ctrl *EstudianteController) UpdateEstudiante(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": "Estudiante actualizado"})
 }
 
-// Función para actualizar campos específicos de un estudiante
+// PatchEstudiante maneja la solicitud para actualizar campos específicos de un estudiante
 func (ctrl *EstudianteController) PatchEstudiante(c *gin.Context) {
 	id := c.Param("id") // Obtener el ID de la URL
 

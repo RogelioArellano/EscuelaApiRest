@@ -34,6 +34,7 @@ func (r *estudianteRepo) GetEstudiantes() ([]models.Estudiante, error) {
 	}
 	defer rows.Close()
 
+	//Almacenar estudiantes obtenidos
 	var estudiantes []models.Estudiante
 	for rows.Next() {
 		var estudiante models.Estudiante
