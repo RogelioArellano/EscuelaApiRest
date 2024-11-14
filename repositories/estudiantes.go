@@ -48,8 +48,8 @@ func (r *estudianteRepo) GetEstudiantes() ([]models.Estudiante, error) {
 }
 
 func (r *estudianteRepo) CreateEstudiante(estudiante models.Estudiante) error {
-	_, err := r.db.Exec("INSERT INTO estudiantes (nombre, direccion, email, telefono, altaLocal, altaSep) VALUES ($1, $2, $3, $4, $5, $6)",
-		estudiante.Nombre, estudiante.Direccion, estudiante.Email, estudiante.Telefono, estudiante.AltaLocal, estudiante.AltaSep)
+	_, err := r.db.Exec("INSERT INTO estudiantes (nombre, direccion, email, telefono, claveEstudiante, altaLocal, altaSep) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		estudiante.Nombre, estudiante.Direccion, estudiante.Email, estudiante.Telefono, estudiante.ClaveEstudiante, estudiante.AltaLocal, estudiante.AltaSep)
 	return err
 }
 
@@ -101,6 +101,7 @@ func (r *estudianteRepo) PatchEstudiante(id string, fields map[string]interface{
 	// Devuelve cualquier error que haya ocurrido durante la ejecución de la consulta
 	return err
 }
+
 func (r *estudianteRepo) DeleteEstudiante(id string) error {
 	_, err := r.db.Exec("DELETE FROM estudiantes WHERE idEstudiante=$1", id)
 	return err

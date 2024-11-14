@@ -55,6 +55,7 @@ func ConnectDB() (*sql.DB, error) {
 		direccion VARCHAR(100),
 		email VARCHAR(50),
 		telefono VARCHAR(13),
+		claveEstudiante VARCHAR(15),
 		altaLocal BOOLEAN,
 		altaSep BOOLEAN
 	)`

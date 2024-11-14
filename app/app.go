@@ -9,7 +9,6 @@ import (
 	controllers "escuelaApiREST/controller"
 	"escuelaApiREST/repositories"
 	"escuelaApiREST/routes"
-
 )
 
 // Initialize configura la base de datos, repositorios, controladores y rutas

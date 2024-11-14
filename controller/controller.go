@@ -7,6 +7,7 @@ import (
 
 	"escuelaApiREST/models"
 	"escuelaApiREST/repositories"
+	"escuelaApiREST/utils"
 )
 
 // EstudianteController se utiliza para gestionar las operaciones CRUD de estudiantes usando un repositorio
@@ -31,21 +32,23 @@ func (ctrl *EstudianteController) GetEstudiantes(c *gin.Context) {
 
 // CreateEstudiante maneja la solicitud para crear un nuevo estudiante
 func (ctrl *EstudianteController) CreateEstudiante(c *gin.Context) {
-	// Vincular el JSON de la solicitud al modelo, manejando el error
 	var input models.Estudiante
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	//Llamar al repositorio para insertar el nuevo estudiande en BD
+	// Generar ClaveEstudiante usando el nombre y apellido del estudiante
+	input.ClaveEstudiante = utils.GenerarClaveEstudiante(input.Nombre, 00001) // "el folio es un valor de prueba
+
+	// Llamar al repositorio para insertar el nuevo estudiante con ClaveEstudiante
 	err := ctrl.repo.CreateEstudiante(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	//Mensaje de exito
-	c.JSON(http.StatusOK, gin.H{"status": "Estudiante creado"})
+
+	c.JSON(http.StatusOK, gin.H{"status": "Estudiante creado", "claveEstudiante": input.ClaveEstudiante})
 }
 
 // UpdateEstudiante maneja la solicitud para actualizar todos los datos del estudiante
